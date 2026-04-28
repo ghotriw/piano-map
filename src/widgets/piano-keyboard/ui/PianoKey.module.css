@@ -1,0 +1,32 @@
+.white {
+  position: relative;
+  width: var(--key-white-width);
+  height: var(--key-white-height);
+  background: var(--key-white-bg);
+  border: 1px solid var(--key-white-border);
+
+  border-radius: 0 0 4px 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  user-select: none;
+  transition: background 0.1s;
+}
+
+.black {
+  width: var(--key-black-width);
+  height: var(--key-black-height);
+  background: var(--key-black-bg);
+  border-radius: 0 0 3px 3px;
+  cursor: pointer;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  user-select: none;
+  transition: background 0.1s;
+}

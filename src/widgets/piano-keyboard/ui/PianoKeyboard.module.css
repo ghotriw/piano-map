@@ -1,0 +1,11 @@
+.container {
+  position: relative;
+}
+
+.keyboard {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  height: var(--key-white-height);
+  width: max-content;
+}
