@@ -1,0 +1,24 @@
+.app {
+  padding: 1rem;
+  max-width: 860px;
+  min-width: 375px;
+  margin: 0 auto;
+  text-align: left;
+  overflow: hidden;
+  position: relative;
+}
+
+.app__title {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .app {
+    padding: 1.5rem;
+  }
+
+  .app__title {
+    font-size: 2rem;
+  }
+}
