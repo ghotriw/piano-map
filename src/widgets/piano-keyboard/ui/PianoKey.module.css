@@ -16,7 +16,12 @@
   transition: background 0.1s;
 }
 
+.white:hover {
+  background: var(--key-white-hover);
+}
+
 .black {
+  position: relative;
   width: var(--key-black-width);
   height: var(--key-black-height);
   background: var(--key-black-bg);
@@ -29,4 +34,55 @@
   padding-bottom: 4px;
   user-select: none;
   transition: background 0.1s;
+}
+
+.black:hover {
+  background: var(--key-black-hover);
+}
+
+.highlighted.white {
+  background: var(--key-highlight-white);
+}
+
+.highlighted.black {
+  background: var(--key-highlight-black);
+}
+
+.active.white {
+  background: var(--key-active-white);
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--key-active-white) 70%, transparent);
+}
+
+.active.black {
+  background: var(--key-active-black);
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--key-active-black) 80%, transparent);
+}
+
+.label {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  color: var(--key-label-white);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.black .label {
+  font-size: 0.5rem;
+  color: var(--key-label-black);
+}
+
+.fingerNumber {
+  position: absolute;
+  top: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--key-finger-white);
+  pointer-events: none;
+}
+
+.black .fingerNumber {
+  color: var(--key-finger-black);
 }
