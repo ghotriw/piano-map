@@ -106,13 +106,13 @@ const DEFAULT_FINGERING: ScaleFingering = {
 };
 
 const PENTATONIC_FINGERING: ScaleFingering = {
-  right: [1, 2, 3, 1, 2],
-  left: [5, 4, 2, 1, 3],
+  right: [1, 2, 3, 1, 2, 5],
+  left: [5, 4, 2, 1, 3, 1],
 };
 
 const BLUES_FINGERING: ScaleFingering = {
-  right: [1, 2, 3, 4, 1, 2],
-  left: [5, 4, 3, 2, 1, 3],
+  right: [1, 2, 3, 4, 1, 2, 5],
+  left: [5, 4, 3, 2, 1, 3, 1],
 };
 
 export function getScaleFingering(root: NoteName, type: ScaleType): ScaleFingering {

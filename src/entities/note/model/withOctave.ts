@@ -1,5 +1,5 @@
-import type { NoteName } from './chromaticScale';
 import { getNoteIndex } from './chromaticScale';
+import type { NoteName } from './chromaticScale';
 
 // Assigns octave numbers to a sequence of notes starting from rootOctave.
 // Increments octave whenever the chromatic index wraps downward (e.g. G→C).

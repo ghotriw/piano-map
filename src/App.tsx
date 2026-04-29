@@ -2,15 +2,32 @@ import { useMemo } from 'react';
 import { useStore } from '@shared/store/useStore';
 import { PianoKeyboard } from '@widgets/piano-keyboard';
 import { getChordNotes, getChordFingering } from '@entities/chord';
-import { getScaleNotes, getScaleFingering } from '@entities/scale';
+import { getScalePlayback } from '@entities/scale';
 import { withOctave } from '@entities/note';
+import { SelectMode } from '@features/select-mode';
+import { SelectRoot } from '@features/select-root';
+import { SelectRootOctave } from '@features/select-root-octave';
+import { SelectChordType } from '@features/select-chord-type';
+import { SelectScaleType } from '@features/select-scale-type';
+import { SelectInversion } from '@features/select-inversion';
+import { SelectHand } from '@features/select-hand';
+import { SelectAccidental } from '@features/select-accidental';
+import { SelectKeyboardSize } from '@features/select-keyboard-size';
+import { PlayButton, usePlaybackStore } from '@features/play-notes';
 import './App.css';
 
-const ROOT_OCTAVE = 4;
+function buildFingerMap(notes: string[], fingers: number[]): Record<string, number> {
+  const map: Record<string, number> = {};
+  notes.forEach((note, i) => {
+    map[note] = fingers[i];
+  });
+  return map;
+}
 
 function App() {
   const mode = useStore((s) => s.mode);
   const root = useStore((s) => s.root);
+  const rootOctave = useStore((s) => s.rootOctave);
   const accidental = useStore((s) => s.accidental);
   const hand = useStore((s) => s.hand);
   const chordType = useStore((s) => s.chordType);
@@ -18,34 +35,61 @@ function App() {
   const scaleType = useStore((s) => s.scaleType);
   const keyboardSize = useStore((s) => s.keyboardSize);
   const showNoteLabels = useStore((s) => s.showNoteLabels);
-  const activeNote = useStore((s) => s.activeNote);
+  const set = useStore((s) => s.set);
+  const activeNote = usePlaybackStore((s) => s.activeNote);
 
-  const { notes, fingerNumbers } = useMemo(() => {
+  const { notes, playbackNotes, fingerNumbers } = useMemo(() => {
     if (mode === 'chord') {
       const noteNames = getChordNotes(root, chordType, inversion, accidental);
-      const notes = withOctave(noteNames, ROOT_OCTAVE);
+      const notes = withOctave(noteNames, rootOctave);
       const fingering = getChordFingering(chordType, inversion);
-      const fingers = fingering[hand === 'left' ? 'left' : 'right'];
-      const fingerNumbers: Record<string, number> = {};
-      notes.forEach((note, i) => {
-        fingerNumbers[note] = fingers[i];
-      });
-      return { notes, fingerNumbers };
+      return { notes, playbackNotes: notes, fingerNumbers: buildFingerMap(notes, fingering[hand]) };
     }
-    const noteNames = getScaleNotes(root, scaleType, accidental);
-    const notes = withOctave(noteNames, ROOT_OCTAVE);
-    const fingering = getScaleFingering(root, scaleType);
-    const fingers = fingering[hand === 'left' ? 'left' : 'right'];
-    const fingerNumbers: Record<string, number> = {};
-    notes.forEach((note, i) => {
-      fingerNumbers[note] = fingers[i];
-    });
-    return { notes, fingerNumbers };
-  }, [mode, root, accidental, hand, chordType, inversion, scaleType]);
+    const { ascending, sequence, fingers } = getScalePlayback(root, scaleType, accidental, rootOctave, hand);
+    return {
+      notes: ascending,
+      playbackNotes: sequence,
+      fingerNumbers: buildFingerMap(sequence, fingers),
+    };
+  }, [mode, root, rootOctave, accidental, hand, chordType, inversion, scaleType]);
 
   return (
     <div className="app">
       <h1 className="app__title">🎹 Piano Map</h1>
+
+      <div className="app__controls">
+        <div className="app__row">
+          <SelectMode />
+          <SelectAccidental />
+          <SelectHand />
+        </div>
+
+        <SelectRoot />
+        <SelectRootOctave />
+
+        {mode === 'chord' ? (
+          <>
+            <SelectChordType />
+            <SelectInversion />
+          </>
+        ) : (
+          <SelectScaleType />
+        )}
+
+        <SelectKeyboardSize />
+
+        <div className="app__row">
+          <PlayButton notes={playbackNotes} mode={mode} />
+          <label className="app__toggle">
+            <input
+              type="checkbox"
+              checked={showNoteLabels}
+              onChange={(e) => set({ showNoteLabels: e.target.checked })}
+            />
+            Note labels
+          </label>
+        </div>
+      </div>
 
       <div className="app__keyboard">
         <PianoKeyboard

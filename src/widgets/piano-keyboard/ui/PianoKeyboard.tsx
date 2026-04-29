@@ -2,10 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { buildKeys } from '../model/buildKeys';
 import { PianoKey } from './PianoKey';
 import { useAudio } from '@shared/lib/useAudio';
+import { normalizeNoteToSharp } from '@entities/note';
+import type { KeyboardSize } from '@entities/keyboard';
 import styles from './PianoKeyboard.module.css';
 
 interface Props {
-  keyboardSize: number;
+  keyboardSize: KeyboardSize;
   highlightedNotes: string[]; // 'C4', 'D#4', etc.
   activeNote?: string | null; // currently playing note during playback
   fingerNumbers: Record<string, number>; // keyed by 'C4', 'D#4', etc.
@@ -14,7 +16,14 @@ interface Props {
 
 export function PianoKeyboard({ keyboardSize, highlightedNotes, activeNote, fingerNumbers, showNoteLabels }: Props) {
   const keys = useMemo(() => buildKeys(keyboardSize), [keyboardSize]);
-  const highlighted = new Set(highlightedNotes);
+  const highlighted = new Set(highlightedNotes.map(normalizeNoteToSharp));
+  const normalizedFingers = useMemo(() => {
+    const result: Record<string, number> = {};
+    for (const [key, val] of Object.entries(fingerNumbers)) {
+      result[normalizeNoteToSharp(key)] = val;
+    }
+    return result;
+  }, [fingerNumbers]);
   const { noteDown, noteUp } = useAudio();
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -25,7 +34,7 @@ export function PianoKeyboard({ keyboardSize, highlightedNotes, activeNote, fing
   const whiteKeys = keys.filter((k) => k.color === 'white');
   const blackKeys = keys.filter((k) => k.color === 'black');
 
-  const highlightedKey = highlightedNotes[0];
+  const highlightedKey = normalizeNoteToSharp(highlightedNotes[0] ?? '');
 
   // Center the first highlighted note in the viewport
   useEffect(() => {
@@ -90,8 +99,8 @@ export function PianoKeyboard({ keyboardSize, highlightedNotes, activeNote, fing
                 key={i}
                 keyData={k}
                 highlighted={highlighted.has(id)}
-                active={activeNote === id}
-                fingerNumber={fingerNumbers[id]}
+                active={normalizeNoteToSharp(activeNote ?? '') === id}
+                fingerNumber={normalizedFingers[id]}
                 showLabel={showNoteLabels}
                 onNoteDown={noteDown}
                 onNoteUp={noteUp}
@@ -113,8 +122,8 @@ export function PianoKeyboard({ keyboardSize, highlightedNotes, activeNote, fing
                 <PianoKey
                   keyData={k}
                   highlighted={highlighted.has(id)}
-                  active={activeNote === id}
-                  fingerNumber={fingerNumbers[id]}
+                  active={normalizeNoteToSharp(activeNote ?? '') === id}
+                  fingerNumber={normalizedFingers[id]}
                   showLabel={showNoteLabels}
                   onNoteDown={noteDown}
                   onNoteUp={noteUp}
