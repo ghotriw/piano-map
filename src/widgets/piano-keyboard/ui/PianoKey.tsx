@@ -23,14 +23,15 @@ export function PianoKey({ keyData, highlighted, active, fingerNumber, showLabel
       className={cls}
       title={id}
       data-note={id}
-      onPointerDown={() => {
-        console.log('noteDown', id);
-        onNoteDown?.(id);
-      }}
+      onPointerDown={() => onNoteDown?.(id)}
       onPointerUp={() => onNoteUp?.(id)}
       onPointerLeave={() => onNoteUp?.(id)}
     >
-      {fingerNumber != null && <span className={styles.fingerNumber}>{fingerNumber}</span>}
+      {fingerNumber != null && (
+        <span className={styles.fingerBadge} data-finger={fingerNumber}>
+          {fingerNumber}
+        </span>
+      )}
       {showLabel && <span className={styles.label}>{note}</span>}
     </div>
   );

@@ -23,8 +23,13 @@
   --key-active-black: #d97706;
   --key-label-white: #666;
   --key-label-black: #ccc;
-  --key-finger-white: #1d4ed8;
-  --key-finger-black: #bfdbfe;
+  --finger-1: #e53935;
+  --finger-2: #fb8c00;
+  --finger-3: #43a047;
+  --finger-4: #1e88e5;
+  --finger-5: #8e24aa;
+  --finger-badge-size: 1rem;
+  --finger-badge-text: #fff;
 
   --text: #6b6375;
   --text-h: #08060d;
