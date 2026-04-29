@@ -77,8 +77,6 @@
 .fingerBadge {
   position: absolute;
   bottom: 0.375rem;
-  width: var(--finger-badge-size);
-  height: var(--finger-badge-size);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -88,6 +86,16 @@
   color: var(--finger-badge-text);
   pointer-events: none;
   line-height: 1;
+}
+
+.white .fingerBadge {
+  width: var(--finger-badge-white-size);
+  height: var(--finger-badge-white-size);
+}
+
+.black .fingerBadge {
+  width: var(--finger-badge-black-size);
+  height: var(--finger-badge-black-size);
 }
 
 .fingerBadge[data-finger="1"] {

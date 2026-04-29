@@ -28,7 +28,8 @@
   --finger-3: #43a047;
   --finger-4: #1e88e5;
   --finger-5: #8e24aa;
-  --finger-badge-size: 1rem;
+  --finger-badge-white-size: 1rem;
+  --finger-badge-black-size: 0.85rem;
   --finger-badge-text: #fff;
 
   --text: #6b6375;

@@ -35,6 +35,7 @@ function App() {
   const scaleType = useStore((s) => s.scaleType);
   const keyboardSize = useStore((s) => s.keyboardSize);
   const showNoteLabels = useStore((s) => s.showNoteLabels);
+  const highlightKeys = useStore((s) => s.highlightKeys);
   const set = useStore((s) => s.set);
   const activeNote = usePlaybackStore((s) => s.activeNote);
 
@@ -88,6 +89,14 @@ function App() {
             />
             Note labels
           </label>
+          <label className="app__toggle">
+            <input
+              type="checkbox"
+              checked={highlightKeys}
+              onChange={(e) => set({ highlightKeys: e.target.checked })}
+            />
+            Highlight keys
+          </label>
         </div>
       </div>
 
@@ -98,6 +107,7 @@ function App() {
           activeNote={activeNote}
           fingerNumbers={fingerNumbers}
           showNoteLabels={showNoteLabels}
+          highlightKeys={highlightKeys}
         />
       </div>
 

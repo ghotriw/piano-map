@@ -18,6 +18,7 @@ interface StoreState {
   hand: Hand;
   accidental: Accidental;
   showNoteLabels: boolean;
+  highlightKeys: boolean;
   keyboardSize: KeyboardSize;
   chordType: ChordType;
   inversion: number;
@@ -36,6 +37,7 @@ export const useStore = create<StoreState>()(
       hand: 'right',
       accidental: 'sharp',
       showNoteLabels: false,
+      highlightKeys: true,
       keyboardSize: 49,
       chordType: 'major',
       inversion: 0,

@@ -12,9 +12,17 @@ interface Props {
   activeNote?: string | null; // currently playing note during playback
   fingerNumbers: Record<string, number>; // keyed by 'C4', 'D#4', etc.
   showNoteLabels: boolean;
+  highlightKeys: boolean;
 }
 
-export function PianoKeyboard({ keyboardSize, highlightedNotes, activeNote, fingerNumbers, showNoteLabels }: Props) {
+export function PianoKeyboard({
+  keyboardSize,
+  highlightedNotes,
+  activeNote,
+  fingerNumbers,
+  showNoteLabels,
+  highlightKeys,
+}: Props) {
   const keys = useMemo(() => buildKeys(keyboardSize), [keyboardSize]);
   const highlighted = new Set(highlightedNotes.map(normalizeNoteToSharp));
   const normalizedFingers = useMemo(() => {
@@ -98,7 +106,7 @@ export function PianoKeyboard({ keyboardSize, highlightedNotes, activeNote, fing
               <PianoKey
                 key={i}
                 keyData={k}
-                highlighted={highlighted.has(id)}
+                highlighted={highlightKeys && highlighted.has(id)}
                 active={normalizeNoteToSharp(activeNote ?? '') === id}
                 fingerNumber={normalizedFingers[id]}
                 showLabel={showNoteLabels}
@@ -121,7 +129,7 @@ export function PianoKeyboard({ keyboardSize, highlightedNotes, activeNote, fing
               >
                 <PianoKey
                   keyData={k}
-                  highlighted={highlighted.has(id)}
+                  highlighted={highlightKeys && highlighted.has(id)}
                   active={normalizeNoteToSharp(activeNote ?? '') === id}
                   fingerNumber={normalizedFingers[id]}
                   showLabel={showNoteLabels}
