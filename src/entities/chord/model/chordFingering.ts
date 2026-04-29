@@ -1,7 +1,5 @@
 import type { ChordType } from './chordFormulas';
 
-export type Hand = 'right' | 'left';
-
 // fingering[chordType][inversion] → { right, left }
 // fingers: 1=thumb, 2=index, 3=middle, 4=ring, 5=pinky
 export const CHORD_FINGERING: Record<ChordType, { right: number[]; left: number[] }[]> = {

@@ -15,3 +15,9 @@ export function getNoteByIndex(index: number, accidental: Accidental = 'sharp'):
   const i = ((index % 12) + 12) % 12;
   return accidental === 'sharp' ? NOTES_SHARP[i] : NOTES_FLAT[i];
 }
+
+const BLACK_KEYS = new Set<NoteName>(['C#', 'Db', 'D#', 'Eb', 'F#', 'Gb', 'G#', 'Ab', 'A#', 'Bb']);
+
+export function isBlackKey(note: NoteName): boolean {
+  return BLACK_KEYS.has(note);
+}
