@@ -1,4 +1,4 @@
-import type { PianoKeyData } from '../model/buildKeys';
+import type { PianoKeyData } from '@entities/keyboard';
 import styles from './PianoKey.module.css';
 
 interface Props {

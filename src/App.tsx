@@ -13,16 +13,10 @@ import { SelectInversion } from '@features/select-inversion';
 import { SelectHand } from '@features/select-hand';
 import { SelectAccidental } from '@features/select-accidental';
 import { SelectKeyboardSize } from '@features/select-keyboard-size';
-import { PlayButton, usePlaybackStore } from '@features/play-notes';
+import { PlayButton } from '@features/play-notes';
+import { usePlaybackStore } from '@shared/store/usePlaybackStore';
+import { buildFingerMap } from '@shared/lib/buildFingerMap';
 import './App.css';
-
-function buildFingerMap(notes: string[], fingers: number[]): Record<string, number> {
-  const map: Record<string, number> = {};
-  notes.forEach((note, i) => {
-    map[note] = fingers[i];
-  });
-  return map;
-}
 
 function App() {
   const mode = useStore((s) => s.mode);

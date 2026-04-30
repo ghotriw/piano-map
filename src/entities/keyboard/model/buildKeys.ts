@@ -1,7 +1,7 @@
 import { NOTES_SHARP, isBlackKey } from '@entities/note';
 import type { NoteName } from '@entities/note';
-import { KEYBOARD_START_OCTAVE } from '@entities/keyboard';
-import type { KeyboardSize } from '@entities/keyboard';
+import { KEYBOARD_START_OCTAVE } from './keyboard';
+import type { KeyboardSize } from './keyboard';
 
 export type KeyColor = 'white' | 'black';
 

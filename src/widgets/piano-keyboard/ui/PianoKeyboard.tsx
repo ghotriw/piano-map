@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { buildKeys } from '../model/buildKeys';
 import { PianoKey } from './PianoKey';
 import { useAudio } from '@shared/lib/useAudio';
 import { normalizeNoteToSharp } from '@entities/note';
+import { buildKeys } from '@entities/keyboard';
 import type { KeyboardSize } from '@entities/keyboard';
 import styles from './PianoKeyboard.module.css';
 
@@ -25,7 +25,10 @@ export function PianoKeyboard({
 }: Props) {
   const keys = useMemo(() => buildKeys(keyboardSize), [keyboardSize]);
   const highlighted = new Set(highlightedNotes.map(normalizeNoteToSharp));
-  const active = useMemo(() => new Set((activeNotes ?? []).map(normalizeNoteToSharp)), [activeNotes]);
+  const active = useMemo(
+    () => new Set((activeNotes ?? []).map(normalizeNoteToSharp)),
+    [activeNotes]
+  );
   const normalizedFingers = useMemo(() => {
     const result: Record<string, number> = {};
     for (const [key, val] of Object.entries(fingerNumbers)) {
@@ -43,7 +46,10 @@ export function PianoKeyboard({
   const whiteKeys = keys.filter((k) => k.color === 'white');
   const blackKeys = keys.filter((k) => k.color === 'black');
 
-  const highlightedIds = useMemo(() => highlightedNotes.map(normalizeNoteToSharp).filter(Boolean), [highlightedNotes]);
+  const highlightedIds = useMemo(
+    () => highlightedNotes.map(normalizeNoteToSharp).filter(Boolean),
+    [highlightedNotes]
+  );
   const highlightedKey = highlightedIds.join(',');
 
   // Center the midpoint between the lowest and highest highlighted notes

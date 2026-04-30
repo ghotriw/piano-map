@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAudio } from '@shared/lib/useAudio';
-import { usePlaybackStore } from '../model/usePlaybackStore';
+import { usePlaybackStore } from '@shared/store/usePlaybackStore';
 import styles from './PlayButton.module.css';
 
 interface Props {
