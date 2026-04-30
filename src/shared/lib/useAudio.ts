@@ -43,6 +43,17 @@ const urls = Object.fromEntries(Object.entries(SAMPLES).map(([note, file]) => [n
 // Singleton sampler shared across all useAudio callers so samples load once.
 let sampler: Tone.Sampler | null = null;
 let ready = false;
+const pendingReleases = new Set<ReturnType<typeof setTimeout>>();
+
+function scheduleRelease(notes: string | string[], durationSec: number) {
+  const s = sampler;
+  if (!s) return;
+  const id = setTimeout(() => {
+    pendingReleases.delete(id);
+    s.triggerRelease(notes);
+  }, durationSec * 1000);
+  pendingReleases.add(id);
+}
 
 function getSampler(): Tone.Sampler {
   if (!sampler) {
@@ -73,19 +84,34 @@ export function useAudio() {
     getSampler().triggerRelease(noteWithOctave);
   }, []);
 
+  // Uses triggerAttack + delayed triggerRelease (instead of triggerAttackRelease)
+  // so notes stay in the sampler's _activeSources until release. This lets
+  // stopAll()'s releaseAll() actually cut them — triggerAttackRelease clears
+  // _activeSources synchronously, leaving releaseAll with nothing to stop.
+  // Pending releases are tracked so stopAll can cancel them; otherwise a stale
+  // timeout from a previous play would fire and silence the next one.
   const playNote = useCallback((noteWithOctave: string, durationSec: number) => {
     const s = getSampler();
     if (!ready) return;
     if (Tone.getContext().state !== 'running') Tone.start();
-    s.triggerAttackRelease(noteWithOctave, durationSec);
+    s.triggerAttack(noteWithOctave);
+    scheduleRelease(noteWithOctave, durationSec);
   }, []);
 
   const playNotes = useCallback((notes: string[], durationSec: number) => {
     const s = getSampler();
     if (!ready) return;
     if (Tone.getContext().state !== 'running') Tone.start();
-    s.triggerAttackRelease(notes, durationSec);
+    s.triggerAttack(notes);
+    scheduleRelease(notes, durationSec);
   }, []);
 
-  return { noteDown, noteUp, playNote, playNotes };
+  const stopAll = useCallback(() => {
+    pendingReleases.forEach(clearTimeout);
+    pendingReleases.clear();
+    if (!sampler) return;
+    sampler.releaseAll();
+  }, []);
+
+  return { noteDown, noteUp, playNote, playNotes, stopAll };
 }
