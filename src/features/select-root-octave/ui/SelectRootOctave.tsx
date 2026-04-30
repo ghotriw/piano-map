@@ -12,7 +12,7 @@ export function SelectRootOctave() {
 
   const options = useMemo<MultiSelectOption<number>[]>(() => {
     const { min, max } = getRootOctaveRange(keyboardSize);
-    const opts: ChipOption<number>[] = [];
+    const opts: MultiSelectOption<number>[] = [];
     for (let o = min; o <= max; o++) {
       opts.push({ value: o, label: String(o) });
     }
