@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useStore } from '@shared/store/useStore';
 import { CHORD_FORMULAS } from '@entities/chord';
-import { Chips } from '@shared/ui/Chips';
-import type { ChipOption } from '@shared/ui/Chips';
+import { MultiSelect } from '@shared/ui/MultiSelect';
+import type { MultiSelectOption } from '@shared/ui/MultiSelect';
 import { Field } from '@shared/ui/Field';
 
 const LABELS = ['Root', '1st', '2nd', '3rd'];
@@ -12,7 +12,7 @@ export function SelectInversion() {
   const chordType = useStore((s) => s.chordType);
   const set = useStore((s) => s.set);
 
-  const options = useMemo<ChipOption<number>[]>(() => {
+  const options = useMemo<MultiSelectOption<number>[]>(() => {
     const max = CHORD_FORMULAS[chordType].length - 1;
     return LABELS.map((label, i) => ({
       value: i,
@@ -23,7 +23,7 @@ export function SelectInversion() {
 
   return (
     <Field label="Inversion">
-      <Chips
+      <MultiSelect
         options={options}
         value={inversion}
         onChange={(value) => set({ inversion: value })}

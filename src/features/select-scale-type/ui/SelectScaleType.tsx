@@ -1,6 +1,6 @@
 import { useStore } from '@shared/store/useStore';
 import type { ScaleType } from '@entities/scale';
-import { Chips } from '@shared/ui/Chips';
+import { MultiSelect } from '@shared/ui/MultiSelect';
 import { Field } from '@shared/ui/Field';
 
 const OPTIONS: { value: ScaleType; label: string }[] = [
@@ -17,11 +17,13 @@ export function SelectScaleType() {
   const set = useStore((s) => s.set);
   return (
     <Field label="Scale type">
-      <Chips
+      <MultiSelect
         options={OPTIONS}
         value={scaleType}
         onChange={(value) => set({ scaleType: value })}
         ariaLabel="Scale type"
+        step="5.75rem"
+        edgeLabels
       />
     </Field>
   );

@@ -1,6 +1,6 @@
 import { useStore } from '@shared/store/useStore';
 import type { Hand } from '@entities/hand';
-import { Chips } from '@shared/ui/Chips';
+import { MultiSelect } from '@shared/ui/MultiSelect';
 import { Field } from '@shared/ui/Field';
 
 const OPTIONS: { value: Hand; label: string }[] = [
@@ -13,7 +13,7 @@ export function SelectHand() {
   const set = useStore((s) => s.set);
   return (
     <Field label="Hand">
-      <Chips options={OPTIONS} value={hand} onChange={(value) => set({ hand: value })} ariaLabel="Hand" />
+      <MultiSelect options={OPTIONS} value={hand} onChange={(value) => set({ hand: value })} ariaLabel="Hand" edgeLabels />
     </Field>
   );
 }

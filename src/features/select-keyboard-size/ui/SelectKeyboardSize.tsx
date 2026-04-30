@@ -1,6 +1,6 @@
 import { useStore } from '@shared/store/useStore';
 import type { KeyboardSize } from '@entities/keyboard';
-import { Chips } from '@shared/ui/Chips';
+import { MultiSelect } from '@shared/ui/MultiSelect';
 import { Field } from '@shared/ui/Field';
 
 const OPTIONS: { value: KeyboardSize; label: string }[] = [
@@ -16,7 +16,7 @@ export function SelectKeyboardSize() {
   const set = useStore((s) => s.set);
   return (
     <Field label="Keyboard size">
-      <Chips
+      <MultiSelect
         options={OPTIONS}
         value={keyboardSize}
         onChange={(value) => set({ keyboardSize: value })}

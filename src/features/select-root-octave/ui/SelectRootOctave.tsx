@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useStore } from '@shared/store/useStore';
 import { getRootOctaveRange } from '@entities/keyboard';
-import { Chips } from '@shared/ui/Chips';
-import type { ChipOption } from '@shared/ui/Chips';
+import { MultiSelect } from '@shared/ui/MultiSelect';
+import type { MultiSelectOption } from '@shared/ui/MultiSelect';
 import { Field } from '@shared/ui/Field';
 
 export function SelectRootOctave() {
@@ -10,7 +10,7 @@ export function SelectRootOctave() {
   const keyboardSize = useStore((s) => s.keyboardSize);
   const set = useStore((s) => s.set);
 
-  const options = useMemo<ChipOption<number>[]>(() => {
+  const options = useMemo<MultiSelectOption<number>[]>(() => {
     const { min, max } = getRootOctaveRange(keyboardSize);
     const opts: ChipOption<number>[] = [];
     for (let o = min; o <= max; o++) {
@@ -21,7 +21,7 @@ export function SelectRootOctave() {
 
   return (
     <Field label="Octave">
-      <Chips
+      <MultiSelect
         options={options}
         value={rootOctave}
         onChange={(value) => set({ rootOctave: value })}

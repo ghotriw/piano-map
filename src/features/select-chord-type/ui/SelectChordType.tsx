@@ -1,6 +1,6 @@
 import { useStore } from '@shared/store/useStore';
 import type { ChordType } from '@entities/chord';
-import { Chips } from '@shared/ui/Chips';
+import { MultiSelect } from '@shared/ui/MultiSelect';
 import { Field } from '@shared/ui/Field';
 
 const OPTIONS: { value: ChordType; label: string }[] = [
@@ -18,11 +18,13 @@ export function SelectChordType() {
   const set = useStore((s) => s.set);
   return (
     <Field label="Chord type">
-      <Chips
+      <MultiSelect
         options={OPTIONS}
         value={chordType}
         onChange={(value) => set({ chordType: value, inversion: 0 })}
         ariaLabel="Chord type"
+        // step="5.75rem"
+        edgeLabels
       />
     </Field>
   );
