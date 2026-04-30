@@ -25,10 +25,7 @@ export function PianoKeyboard({
 }: Props) {
   const keys = useMemo(() => buildKeys(keyboardSize), [keyboardSize]);
   const highlighted = new Set(highlightedNotes.map(normalizeNoteToSharp));
-  const active = useMemo(
-    () => new Set((activeNotes ?? []).map(normalizeNoteToSharp)),
-    [activeNotes]
-  );
+  const active = useMemo(() => new Set((activeNotes ?? []).map(normalizeNoteToSharp)), [activeNotes]);
   const normalizedFingers = useMemo(() => {
     const result: Record<string, number> = {};
     for (const [key, val] of Object.entries(fingerNumbers)) {
@@ -46,21 +43,29 @@ export function PianoKeyboard({
   const whiteKeys = keys.filter((k) => k.color === 'white');
   const blackKeys = keys.filter((k) => k.color === 'black');
 
-  const highlightedKey = normalizeNoteToSharp(highlightedNotes[0] ?? '');
+  const highlightedIds = useMemo(() => highlightedNotes.map(normalizeNoteToSharp).filter(Boolean), [highlightedNotes]);
+  const highlightedKey = highlightedIds.join(',');
 
-  // Center the first highlighted note in the viewport
+  // Center the midpoint between the lowest and highest highlighted notes
   useEffect(() => {
     const wrapper = wrapperRef.current;
     const keyboard = keyboardRef.current;
-    if (!wrapper || !keyboard || !highlightedKey) return;
-    const target = keyboard.querySelector<HTMLElement>(`[data-note="${CSS.escape(highlightedKey)}"]`);
-    if (!target) return;
-    const targetRect = target.getBoundingClientRect();
+    if (!wrapper || !keyboard || highlightedIds.length === 0) return;
     const wrapperRect = wrapper.getBoundingClientRect();
-    const offset =
-      wrapper.scrollLeft + (targetRect.left - wrapperRect.left) + targetRect.width / 2 - wrapper.clientWidth / 2;
+    let minLeft = Infinity;
+    let maxRight = -Infinity;
+    for (const id of highlightedIds) {
+      const el = keyboard.querySelector<HTMLElement>(`[data-note="${CSS.escape(id)}"]`);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.left < minLeft) minLeft = rect.left;
+      if (rect.right > maxRight) maxRight = rect.right;
+    }
+    if (minLeft === Infinity) return;
+    const center = (minLeft + maxRight) / 2;
+    const offset = wrapper.scrollLeft + (center - wrapperRect.left) - wrapper.clientWidth / 2;
     wrapper.scrollTo({ left: offset, behavior: 'smooth' });
-  }, [highlightedKey, keyboardSize]);
+  }, [highlightedKey, highlightedIds, keyboardSize]);
 
   // Track whether edge-fade indicators should be shown
   useEffect(() => {
