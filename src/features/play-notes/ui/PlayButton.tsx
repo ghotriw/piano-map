@@ -14,16 +14,16 @@ const SCALE_NOTE_DURATION_SEC = 0.45;
 
 export function PlayButton({ notes, mode }: Props) {
   const { playNote, playNotes } = useAudio();
-  const setActiveNote = usePlaybackStore((s) => s.setActiveNote);
+  const setActiveNotes = usePlaybackStore((s) => s.setActiveNotes);
   const [isPlaying, setIsPlaying] = useState(false);
   const cancelRef = useRef(false);
 
   useEffect(
     () => () => {
       cancelRef.current = true;
-      setActiveNote(null);
+      setActiveNotes([]);
     },
-    [setActiveNote]
+    [setActiveNotes]
   );
 
   const handlePlay = useCallback(async () => {
@@ -32,21 +32,23 @@ export function PlayButton({ notes, mode }: Props) {
     cancelRef.current = false;
 
     if (mode === 'chord') {
+      setActiveNotes(notes);
       playNotes(notes, CHORD_DURATION_SEC);
       await new Promise((r) => setTimeout(r, CHORD_DURATION_SEC * 1000));
+      setActiveNotes([]);
       setIsPlaying(false);
       return;
     }
 
     for (const note of notes) {
       if (cancelRef.current) break;
-      setActiveNote(note);
+      setActiveNotes([note]);
       playNote(note, SCALE_NOTE_DURATION_SEC);
       await new Promise((r) => setTimeout(r, SCALE_STEP_MS));
     }
-    setActiveNote(null);
+    setActiveNotes([]);
     setIsPlaying(false);
-  }, [isPlaying, mode, notes, playNote, playNotes, setActiveNote]);
+  }, [isPlaying, mode, notes, playNote, playNotes, setActiveNotes]);
 
   return (
     <button

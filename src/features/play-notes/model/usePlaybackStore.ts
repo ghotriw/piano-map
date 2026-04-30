@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 
 interface PlaybackState {
-  activeNote: string | null;
-  setActiveNote: (note: string | null) => void;
+  activeNotes: string[];
+  setActiveNotes: (notes: string[]) => void;
 }
 
 export const usePlaybackStore = create<PlaybackState>((set) => ({
-  activeNote: null,
-  setActiveNote: (activeNote) => set({ activeNote }),
+  activeNotes: [],
+  setActiveNotes: (activeNotes) => set({ activeNotes }),
 }));

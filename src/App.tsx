@@ -37,7 +37,7 @@ function App() {
   const showNoteLabels = useStore((s) => s.showNoteLabels);
   const highlightKeys = useStore((s) => s.highlightKeys);
   const set = useStore((s) => s.set);
-  const activeNote = usePlaybackStore((s) => s.activeNote);
+  const activeNotes = usePlaybackStore((s) => s.activeNotes);
 
   const { notes, playbackNotes, fingerNumbers } = useMemo(() => {
     if (mode === 'chord') {
@@ -104,7 +104,7 @@ function App() {
         <PianoKeyboard
           keyboardSize={keyboardSize}
           highlightedNotes={notes}
-          activeNote={activeNote}
+          activeNotes={activeNotes}
           fingerNumbers={fingerNumbers}
           showNoteLabels={showNoteLabels}
           highlightKeys={highlightKeys}
